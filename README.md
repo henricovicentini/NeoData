@@ -1,101 +1,100 @@
-# NeoData – Upload e Limpeza de Dados
+# NeoData.AI
 
-## Organize, limpe, reutilize
+**“Organize, limpe, reutilize”**
 
-O NeoData é uma aplicação Flask que permite:
+## 🚀 Objetivo Geral
+Criar um sistema capaz de ingerir dados estruturados (CSV, SQL), detectar inconsistências, limpar automaticamente e disponibilizar os dados tratados para reutilização em outros sistemas, relatórios ou modelos.
 
-Fazer upload de arquivos (.csv, .xlsx, .json ou .zip).
+---
 
-Inserir os dados no banco de dados SQLite.
+## 🔄 Fluxo de Funcionamento
 
-Executar pipeline de limpeza automática (remoção de duplicados, imputação de nulos, detecção de outliers).
+1. **Ingestão de Dados**
+   - Upload de arquivos (CSV/Excel).
+   - Conexão via API a bancos de dados (MySQL, PostgreSQL, SQL Server).
+   - Extração para DataFrames (pandas).
 
-Baixar os dados tratados em CSV, XLSX ou JSON.
+2. **Análise Automática**
+   - Estatísticas descritivas para identificar:
+     - Valores ausentes (NaN)
+     - Linhas duplicadas
+     - Outliers
+     - Tipos de dados inconsistentes
 
-Visualizar dashboards interativos com filtros.
+3. **Limpeza Inteligente (IA + Regras)**
+   - Preenchimento automático (média, mediana, imputação por KNN/Random Forest).
+   - Conversão de formatos (datas, moedas, strings).
+   - Remoção/correção de duplicatas.
 
-# 🚀 Tecnologias
+4. **Reutilização**
+   - Exportação dos dados tratados em CSV/JSON.
+   - Inserção dos dados limpos em outro banco de dados.
+   - Integração com dashboards (Power BI, Metabase).
 
-Flask
- (backend web)
+---
 
-Flask-Login
- (autenticação)
+## 🛠️ Ferramentas Sugeridas
+- **Python + pandas** → manipulação de dados  
+- **SQLAlchemy** → conexão a bancos SQL  
+- **scikit-learn** → detecção de outliers e imputação inteligente  
+- **Great Expectations** → validação de qualidade de dados  
+- **FastAPI ou Flask** → API  
+- **Streamlit/Django/Flask + HTML/CSS** → interface web  
 
-Flask-Migrate
- (migrações de banco)
+---
 
-SQLAlchemy
- (ORM)
+## 📊 Complexidade por Etapa
+| Etapa | Descrição | Grau |
+|-------|-----------|------|
+| 1 | Site (upload CSV → limpeza → download CSV) | **5/10** |
+| 2 | Site + API (upload → consumo por sistemas externos) | **6/10** |
+| 3 | API + Banco de Dados (consulta → limpeza → retorno) | **7/10** |
 
-Pandas
- + Scikit-Learn
- (limpeza e tratamento)
+---
 
-Bootstrap 5
- (frontend responsivo)
+## 🌐 Recursos da Demonstração
+- Visualização dos **dados brutos** (com destaques para ausentes, duplicatas e outliers).  
+- Botão **“Limpar Dados”** → executa modelo de limpeza.  
+- Comparação **antes x depois** da limpeza.  
+- **Download dos dados tratados** (CSV ou Excel).  
+- **Estatísticas e gráficos** sobre valores imputados, duplicatas removidas e outliers tratados.  
 
-Chart.js
- (dashboards interativos)
+---
 
-# 📂 Estrutura do Projeto
+## 📥 Como Popular o Banco de Dados
+- **Gerar dados sintéticos** (pandas + numpy) com erros intencionais.  
+- **Usar datasets públicos** (Kaggle, UCI, etc.).  
+- **Atualização automática** com inserção periódica de registros.  
 
-NeoData/
-│── app/
-│   ├── __init__.py
-│   ├── main.py              # app principal Flask (factory)
-│   ├── db.py                # inicialização SQLAlchemy
-│   ├── models.py            # tabelas do banco
-│   ├── cleaning.py          # funções de análise e limpeza
-│   ├── blueprints/          # rotas organizadas
-│   │   ├── auth/            # login/cadastro
-│   │   ├── user/            # perfil do usuário
-│   │   └── predicao/        # upload e visualização
-│   ├── templates/           # HTMLs
-│   └── static/              # CSS, JS, uploads
-│── requirements.txt
-│── Dockerfile
-│── docker-compose.yml
-│── README.md
+---
 
-# ⚙️ Instalação e Uso
+## ⚙️ Tecnologias da Demo
+- **Frontend:** HTML + CSS + Bootstrap/Tailwind  
+- **Backend:** Flask ou FastAPI  
+- **Banco de dados:** SQLite (protótipo) ou PostgreSQL  
+- **Python:** pandas, scikit-learn, SQLAlchemy  
+- **Visualização:** Plotly, Matplotlib, Dash  
 
-🔹 Rodando localmente
+---
 
-git clone https://github.com/seu-usuario/neodata.git
-cd neodata
-python -m venv .venv
-source .venv/bin/activate   # Linux/Mac
-.venv\Scripts\activate      # Windows
-pip install -r requirements.txt
-flask --app app.main run
+## 🔮 Observações
+- Para protótipo: apenas **upload CSV + limpeza + download**.  
+- Próxima etapa: adicionar banco e API para escalabilidade.  
+- Continuous Learning não é necessário neste estágio.  
 
+---
 
-🔹 Rodando com Docker
+## 👨‍💻 Contribuindo
+Contribuições são bem-vindas!  
+Abra uma **issue** ou envie um **pull request**.  
 
-docker-compose up --build
+---
 
-# 🔄 Fluxo de Uso
+## 📜 Licença
+Este projeto está sob a licença **MIT**.
 
-Faça login/cadastro.
+---
 
-Vá em Upload e envie um arquivo (CSV, XLSX, JSON ou ZIP).
-
-Os dados são salvos na tabela RawRecord.
-
-Clique em Executar Limpeza → dados tratados vão para CleanRecord.
-
-Baixe os dados em CSV, XLSX ou JSON.
-
-Explore os dashboards com filtros por empresa/ano.
-
-# 🛠️ Desenvolvimento
-
-Banco de dados SQLite (pode ser trocado por PostgreSQL facilmente).
-
-Migrações com Alembic:
-
-flask --app app.main db init
-flask --app app.main db migrate -m "init"
-flask --app app.main db upgrade
+## 📭 Contato
+vicentinihenrico@gmail.com
 
