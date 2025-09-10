@@ -1,4 +1,4 @@
-# NeoData.AI
+# NeoData
 
 **“Organize, limpe, reutilize”**
 
