@@ -1,0 +1,50 @@
+{% extends 'header.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4">
+      <h3 class="text-center mb-2 fw-bold text-primary">Meu Perfil</h3>
+      <p class="text-center text-muted mb-4">Gerencie suas informações e credenciais</p>
+
+      <!-- Exibe mensagens do Flask -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, msg in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ msg }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Nome</label>
+          <input type="text" name="nome" class="form-control" value="{{ user.nome }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+        </div>
+
+        <hr>
+
+        <div class="mb-3">
+          <label class="form-label">Senha atual</label>
+          <input type="password" name="senha_atual" class="form-control" required placeholder="Digite sua senha atual para confirmar">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Nova senha (opcional)</label>
+          <input type="password" name="nova_senha" class="form-control" placeholder="Deixe em branco para não alterar">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Atualizar Perfil</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

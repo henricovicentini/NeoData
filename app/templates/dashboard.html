@@ -1,0 +1,121 @@
+{% extends "header.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="fw-bold text-center mb-2 text-primary">Dashboard de Dados</h2> 
+    <p class="text-center text-muted">Visualize relatórios interativos antes e depois da limpeza</p>
+
+    <!-- Caixa de downloads -->
+    <div class="card shadow-sm p-3 mb-4">
+        <h5 class="fw-bold text-primary">Baixar Resultados</h5>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="downloadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-download"></i> Download
+            </button>
+            <ul class="dropdown-menu shadow" aria-labelledby="downloadDropdown">
+                <li><a class="dropdown-item" href="{{ url_for('download_csv', doc_id=doc_id) }}"><i class="bi bi-filetype-csv text-primary"></i> CSV</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('download_xlsx', doc_id=doc_id) }}"><i class="bi bi-file-earmark-spreadsheet text-success"></i> XLSX</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('download_json', doc_id=doc_id) }}"><i class="bi bi-filetype-json text-info"></i> JSON</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('download_report_pdf', doc_id=doc_id) }}"><i class="bi bi-file-earmark-pdf text-danger"></i> PDF</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Estatísticas resumidas -->
+    <div class="card shadow-sm p-3 mb-4">
+        <h5 class="fw-bold text-primary">Resumo da Limpeza</h5>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Linhas antes: <b>{{ summary.linhas_antes }}</b></li>
+            <li class="list-group-item">Linhas depois: <b>{{ summary.linhas_depois }}</b></li>
+            <li class="list-group-item">Duplicadas antes: <b>{{ summary.duplicadas_antes }}</b></li>
+            <li class="list-group-item">Duplicadas depois: <b>{{ summary.duplicadas_depois }}</b></li>
+            <li class="list-group-item">Dados ausentes antes: <b>{{ summary.ausentes_antes }}</b></li>
+            <li class="list-group-item">Dados ausentes depois: <b>{{ summary.ausentes_depois }}</b></li>
+        </ul>
+    </div>
+
+    <!-- Estatísticas detalhadas -->
+    <div class="card shadow-sm p-3 mb-4">
+        <h5 class="fw-bold text-primary">Estatísticas Detalhadas</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        {% for col in stats[0].keys() %}
+                            <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in stats %}
+                        <tr>
+                            {% for val in row.values() %}
+                                <td>{{ val }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Gráficos comparativos -->
+    <div class="row g-4">
+        {% for col, values in charts.items() %}
+        <div class="col-md-6">
+            <div class="card shadow-sm p-3">
+                <h5 class="fw-bold text-center text-primary">{{ col }}</h5>
+                <canvas id="chart_{{ loop.index }}"></canvas>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Botões finais -->
+    <div class="d-flex justify-content-center gap-3 mt-5">
+        <form action="{{ url_for('api_clean_run', doc_id=doc_id) }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Voltar para Limpeza
+            </button>
+        </form>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">
+            <i class="bi bi-house"></i> Início
+        </a>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    {% for col, values in charts.items() %}
+    new Chart(document.getElementById("chart_{{ loop.index }}"), {
+        type: 'bar',
+        data: {
+            labels: {{ values.labels|safe }},
+            datasets: [
+                {
+                    label: 'Antes da Limpeza',
+                    data: {{ values.before|safe }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderRadius: 6
+                },
+                {
+                    label: 'Depois da Limpeza',
+                    data: {{ values.after|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true, position: 'bottom' }
+            }
+        }
+    });
+    {% endfor %}
+</script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <h2 class="fw-bold text-center mb-2 text-primary">Predição de Dados</h2>
+    <p class="text-center text-muted mb-4">Organize, limpe, reutilize</p>
+
+    <!-- Formulário de upload -->
+    <div class="card shadow-sm p-4 mb-4">
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('predicao.upload') }}">
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Selecione um arquivo (CSV, XLSX ou JSON):</label>
+                <input type="file" class="form-control" name="file" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-upload"></i> Enviar e Analisar
+            </button>
+        </form>
+    </div>
+
+    <!-- Lista de documentos existentes -->
+    {% if documentos %}
+        <h4 class="fw-bold mb-3">Meus Documentos</h4>
+        <ul class="list-group mb-4 shadow-sm">
+            {% for doc in documentos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-file-earmark-text"></i>
+                        {{ doc.nome_documento }}
+                    </div>
+                    <a href="{{ url_for('predicao.view_doc', id=doc.id) }}" 
+                       class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-eye"></i> Ver Detalhes
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Visualização de documento -->
+    {% if documento %}
+        <h4 class="fw-bold mb-3">Visualizando: {{ documento.nome_documento }}</h4>
+        <div class="table-responsive card shadow-sm p-3">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        {% for col in columns %}
+                            <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in sample %}
+                        <tr>
+                            {% for col in columns %}
+                                <td>{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Ações após visualizar -->
+        <div class="d-flex gap-3 mt-4">
+            <form action="{{ url_for('api_clean_run') }}" method="post">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-brush"></i> Executar Limpeza
+                </button>
+            </form>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">
+                <i class="bi bi-house"></i> Voltar
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}

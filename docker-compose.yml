@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: neodata_web
+    command: flask run --host=0.0.0.0 --port=5000
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.main:create_app
+      - FLASK_ENV=development
+      - SECRET_KEY=neodata-secret-key
+      - SQLALCHEMY_DATABASE_URI=sqlite:///neodata.db
+    volumes:
+      - .:/code

@@ -1,0 +1,93 @@
+{% extends "header.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    {% if error %}
+        <div class="alert alert-danger text-center fs-5 shadow-sm">
+            <i class="bi bi-x-circle-fill"></i> {{ error }}
+        </div>
+    {% else %}
+        <div class="alert alert-success text-center fs-5 shadow-sm">
+            <i class="bi bi-check-circle-fill"></i> {{ message }}
+        </div>
+
+        <!-- Resumo Antes/Depois -->
+        <h4 class="mt-4 fw-bold text-primary">Resumo da Limpeza</h4>
+        <div class="card shadow-sm p-3 mb-4">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Linhas antes: <b>{{ summary.linhas_antes }}</b></li>
+                <li class="list-group-item">Linhas depois: <b>{{ summary.linhas_depois }}</b></li>
+                <li class="list-group-item">Duplicadas antes: <b>{{ summary.duplicadas_antes }}</b></li>
+                <li class="list-group-item">Duplicadas depois: <b>{{ summary.duplicadas_depois }}</b></li>
+                <li class="list-group-item">Dados ausentes antes: <b>{{ summary.ausentes_antes }}</b></li>
+                <li class="list-group-item">Dados ausentes depois: <b>{{ summary.ausentes_depois }}</b></li>
+            </ul>
+        </div>
+
+        <!-- Validação -->
+        <h4 class="mt-4 fw-bold text-primary">Validação dos Dados</h4>
+        <div class="card shadow-sm p-3 mb-4">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Sem Nulos em Numéricos: {{ 'Sim' if validation.no_nulls_numeric else 'Não' }}</li>
+                <li class="list-group-item">Somente Números Positivos: {{ 'Sim' if validation.numeric_positive else 'Não' }}</li>
+                <li class="list-group-item">Quantidade de Linhas: {{ validation.row_count }}</li>
+                <li class="list-group-item">Dados Válidos: {{ 'Sim' if validation.valid else 'Não' }}</li>
+            </ul>
+        </div>
+
+        <!-- Amostra de dados -->
+        <h4 class="mt-4 fw-bold text-primary">Amostra de Dados Limpos</h4>
+        <div class="card shadow-sm p-3 mb-4">
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            {% for col in columns %}
+                                <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in sample %}
+                            <tr>
+                                {% for col in columns %}
+                                    <td>{{ row[col] }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Caixa de downloads -->
+        <div class="card shadow-sm p-3 mb-4">
+            <h5 class="fw-bold text-primary">Baixar Resultados</h5>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="downloadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-download"></i> Download
+                </button>
+                <ul class="dropdown-menu shadow" aria-labelledby="downloadDropdown">
+                    <li><a class="dropdown-item" href="{{ url_for('download_csv', doc_id=doc_id) }}"><i class="bi bi-filetype-csv text-primary"></i> CSV</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('download_json', doc_id=doc_id) }}"><i class="bi bi-filetype-json text-info"></i> JSON</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('download_report_pdf', doc_id=doc_id) }}"><i class="bi bi-file-earmark-pdf text-danger"></i> PDF</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Botões finais -->
+        <div class="d-flex gap-3 mt-4">
+            <a href="{{ url_for('dashboard', doc_id=doc_id) }}" class="btn btn-success">
+                <i class="bi bi-bar-chart-line"></i> Conferir no Dashboard
+            </a>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">
+                <i class="bi bi-house"></i> Voltar
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}

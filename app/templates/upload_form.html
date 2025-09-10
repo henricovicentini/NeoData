@@ -1,0 +1,40 @@
+{% extends "header.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Título -->
+    <h3 class="fw-bold text-primary mb-4">
+        <i class="bi bi-upload"></i> Enviar Arquivo para Limpeza
+    </h3>
+
+    <!-- Card do formulário -->
+    <div class="card shadow-sm p-4">
+        <form action="{{ url_for('api_upload') }}" method="post" enctype="multipart/form-data">
+            
+            <!-- Input do arquivo -->
+            <div class="mb-3">
+                <label for="file" class="form-label fw-bold">Selecione o arquivo:</label>
+                <input class="form-control" type="file" name="file" id="file" required>
+                <div class="form-text">
+                    Formatos aceitos: <b>.csv, .xls, .xlsx, .json, .zip</b>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="d-flex justify-content-end gap-3 mt-4">
+                <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-cloud-arrow-up"></i> Enviar
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}
